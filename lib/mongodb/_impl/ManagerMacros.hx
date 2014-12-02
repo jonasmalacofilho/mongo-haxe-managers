@@ -11,7 +11,7 @@ using haxe.macro.TypeTools;
 
 class ManagerMacros {
     
-    static function findField(fields:Array<ClassField>, name:String):Null<ClassField>
+    static function selectField(fields:Array<ClassField>, name:String):Null<ClassField>
     {
         for (f in fields)
             if (f.name == name && f.kind.match(FVar(_)))
@@ -25,10 +25,10 @@ class ManagerMacros {
         case TType(_, _):
             return getField(t.follow(), name);
         case TAnonymous(_.get() => anon):
-            return findField(anon.fields, name);
-        case TInst(_.get() => cl, params):
+            return selectField(anon.fields, name);
+        case TInst(_.get() => cl, _):
             return cl.findField(name);
-        case TAbstract(_.get() => abs, params):
+        case TAbstract(_.get() => abs, _):
             if (abs.meta.has(":coreType"))
                 throw 'Assert: core $abs';
             return getField(abs.type, name);

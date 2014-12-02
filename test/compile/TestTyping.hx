@@ -68,21 +68,25 @@ class TestTyping {
     public static function main()
     {
 #if btgood
+        // basics
         check(Person, { name : "Fury", age : 90 });
         check(Person, { name : "Fury" });
         check(Person, { age : 90 });
         check(Person, { name : "Fury", age : { "$gt" : 40 } });
 
+        // emebedded objects
         check(Boss, { title : "Director", person : { name : "Fury", age : 90 } });
         check(Boss, { title : "Director", person : { name : "Fury" } });
         check(Boss, { title : "Director" });
 
+        // abstracts, classes and interfaces
         check(ABoss, { title : "Director", person : { name : "Fury", age : 90 } });
         check(CBoss, { title : "Director", person : { name : "Fury", age : 90 } });
         check(IBoss, { title : "Director", person : { name : "Fury", age : 90 } });
         check(CEBoss, { title : "Director", person : { name : "Fury", age : 90 } });
         check(Team, { name : "S.H.I.E.L.D", boss : { title : "Director", person : { name : "Fury", age : 90 } } });
 
+        // embedded arrays
         check(Team, { people : [{ name : "Fury" }] });
         check(Team, { people : { "$in" : [{ name : "Fury" }] } });
 
