@@ -47,9 +47,10 @@ class ManagerMacros {
         case EObjectDecl(fs):
             for (f in fs) {
                 if (f.field.substr(0, 9) == "@$__hx__$") {  // mongo operators, i.e., $gt
-                    switch (f.field.substr(9)) {
-                    case "in", "nin", "all" if (!f.expr.expr.match(EArrayDecl(_))):
-                        throw 'Query operator ${f.field.substr(8)} expects an array';
+                    var op = f.field.substr(8);
+                    switch (op) {
+                    case "$in", "$nin", "$all" if (!f.expr.expr.match(EArrayDecl(_))):
+                        throw 'Query operator $op expects an array';
                     case all:
                         typeCheck(t, f.expr, name);
                     }
