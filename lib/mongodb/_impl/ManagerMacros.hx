@@ -10,7 +10,7 @@ using haxe.macro.ExprTools;
 using haxe.macro.TypeTools;
 
 class ManagerMacros {
-    
+
     static function selectField(fields:Array<ClassField>, name:String):Null<ClassField>
     {
         for (f in fields)
@@ -46,7 +46,16 @@ class ManagerMacros {
         switch (e.expr) {
         case EObjectDecl(fs):
             for (f in fs) {
-                if (f.field.substr(0, 1) == "@") {  // mongo operators, i.e., $gt
+                if (f.field.substr(0, 9) == "@$__hx__$") {  // mongo operators, i.e., $gt
+                    switch (f.field.substr(9)) {
+                    case "in", "nin", "all":
+                        switch (f.expr.expr) {
+                        case EArrayDecl(_): // OK
+                        case all: throw 'Query operator ${f.field.substr(8)} expects an array';
+                        }
+                    case all:
+                        // NOOP
+                    }
                     typeCheck(t, f.expr, name);
                 } else if (name == null) {          // base object fields
                     typeCheck(t, f.expr, f.field);

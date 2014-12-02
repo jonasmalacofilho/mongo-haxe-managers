@@ -38,9 +38,9 @@ class BuildTester {
 
             switch (module.result) {
             case BSuccess:
-                Assert.equals(0, e, '$file failed to build with:\n      ${m.split("\n").join("\n      ")}');
+                Assert.equals(0, e, '$file${module.vars} failed to build with:\n      ${m.split("\n").join("\n      ")}');
             case BFailure(code, reg):
-                Assert.notEquals(0, e, '$file should not build');
+                Assert.notEquals(0, e, '$file${module.vars} should not build');
                 trace('Failure message:\n$m');
                 if (code != null)
                     Assert.equals(code, e);

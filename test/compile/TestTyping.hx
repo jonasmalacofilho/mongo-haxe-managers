@@ -15,9 +15,14 @@ class TestTyping extends BuildTester {
             { module : "compile.TestTyping", vars : ["bt", "bterror5"],  result : BFailure(null, ~/invalid type for field title/i) },
             { module : "compile.TestTyping", vars : ["bt", "bterror6"],  result : BFailure(null, ~/invalid type for field name/i) },
             { module : "compile.TestTyping", vars : ["bt", "bterror7"],  result : BFailure(null, ~/invalid type for field age/i) },
-            // { module : "compile.TestTyping", vars : ["bt", "bterror8"],  result : BFailure(null, null) },
-            // { module : "compile.TestTyping", vars : ["bt", "bterror9"],  result : BFailure(null, null) },
-            // { module : "compile.TestTyping", vars : ["bt", "bterror10"], result : BFailure(null, null) },
+            { module : "compile.TestTyping", vars : ["bt", "bterror8"],  result : BFailure(null, ~/invalid type for field name/i) },
+            { module : "compile.TestTyping", vars : ["bt", "bterror9"],  result : BFailure(null, ~/invalid type for field name/i) },
+            { module : "compile.TestTyping", vars : ["bt", "bterror10"], result : BFailure(null, ~/invalid type for field name/i) },
+            { module : "compile.TestTyping", vars : ["bt", "bterror11"], result : BFailure(null, ~/\$in expects an array/i) },
+            // { module : "compile.TestTyping", vars : ["bt", "bterror12"], result : BFailure(null, null) },
+            // { module : "compile.TestTyping", vars : ["bt", "bterror13"], result : BFailure(null, null) },
+            // { module : "compile.TestTyping", vars : ["bt", "bterror14"], result : BFailure(null, null) },
+            // { module : "compile.TestTyping", vars : ["bt", "bterror15"], result : BFailure(null, null) },
             { module : "compile.TestTyping", vars : ["bt", "btcur"],     result : BSuccess }
         ]);
     }
@@ -90,7 +95,10 @@ class TestTyping {
         check(Team, { people : [{ name : "Fury" }] });
         check(Team, { people : { "$in" : [{ name : "Fury" }] } });
 
-        // Expected errors: 
+        // op $in for matching values
+        check(Person, { name : { "$in" : ["Coulson", "Fury"] } });
+
+        // Expected errors:
 #elseif bterror1
         check(1, { age : "ninety" });
 #elseif bterror2
@@ -105,9 +113,14 @@ class TestTyping {
         check(Boss, { title : "Director", person : { name : 1 } });
 #elseif bterror7
         check(Team, { name : "S.H.I.E.L.D", boss : { person : { age : "ninety" } } });
-// #elseif bterror8
-// #elseif bterror9
-// #elseif bterror10
+#elseif bterror8
+        check(Team, { people : [{ name : 1 }] });
+#elseif bterror9
+        check(Team, { people : { "$in" : [{ name : 1 }] } });
+#elseif bterror10
+        check(Person, { name : { "$in" : [1] } });
+#elseif bterror11
+        check(Person, { name : { "$in" : "Fury" } });
 #elseif btcur
         // var p = { people : [{ name : "Fury" }] };
         // var q:{ people:Array<{ name:String }> } = cast null;
