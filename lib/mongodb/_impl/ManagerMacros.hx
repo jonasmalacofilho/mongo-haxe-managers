@@ -40,7 +40,9 @@ class ManagerMacros {
     public static function typeCheck(t:ComplexType, e:Expr, ?name:String)
     {
         trace('Type check $name');
+        trace(e.toString());
         trace(t);
+        // trace(e);
         switch (e.expr) {
         case EObjectDecl(fs):
             for (f in fs) {
@@ -49,15 +51,23 @@ class ManagerMacros {
                 } else if (name == null) {          // base object fields
                     typeCheck(t, f.expr, f.field);
                 } else {                            // embedded object fields
-                    trace(t);
                     var ft = getField(t.toType(), name);
                     if (ft != null) {
-                        typeCheck(ft.type.toComplexType(), e, null);
+                        trace(ft.type);
+                        switch (ft.type) {
+                        case TInst(_.get() => { name : "Array" }, [atype]):  // embedded array
+                            typeCheck(atype.toComplexType(), e, null);
+                        case all:
+                            typeCheck(ft.type.toComplexType(), e, null);
+                        }
                     } else {
                         throw 'No field $name';
                     }
                 }
             }
+        case EArrayDecl(subs):
+            for (s in subs)
+                typeCheck(t, s, name);
         case all:
             trace('Final type check $name');
             typeof(macro {

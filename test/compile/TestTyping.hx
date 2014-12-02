@@ -83,6 +83,9 @@ class TestTyping {
         check(CEBoss, { title : "Director", person : { name : "Fury", age : 90 } });
         check(Team, { name : "S.H.I.E.L.D", boss : { title : "Director", person : { name : "Fury", age : 90 } } });
 
+        check(Team, { people : [{ name : "Fury" }] });
+        check(Team, { people : { "$in" : [{ name : "Fury" }] } });
+
         // Expected errors: 
 #elseif bterror1
         check(1, { age : "ninety" });
@@ -102,6 +105,9 @@ class TestTyping {
 // #elseif bterror9
 // #elseif bterror10
 #elseif btcur
+        // var p = { people : [{ name : "Fury" }] };
+        // var q:{ people:Array<{ name:String }> } = cast null;
+        // p = q;
 #end
     }
 
