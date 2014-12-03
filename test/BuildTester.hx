@@ -6,14 +6,14 @@ enum BuildResult {
 }
 
 typedef Module = {
-    var module:String;
-    var vars:Array<String>;
-    var result:BuildResult;
+    module : String,
+    vars : Array<String>,
+    result : BuildResult
 }
 
 class BuildTester {
     var modules:Array<Module>;
-    
+
     public function new(modules)
     {
         this.modules = modules;

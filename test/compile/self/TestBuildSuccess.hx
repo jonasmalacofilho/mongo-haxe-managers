@@ -4,7 +4,7 @@ class TestBuildSuccess {
 
     static function main()
     {
-        (1 : Int);
+        (1:Int);
     }
 
 }

@@ -89,7 +89,7 @@ class ManagerMacros {
         return switch (parse('(_:${t.toString()})', t.pos)) {
         case macro (_:$t): t;
         case all: throw "assert";
-        };
+        }
     }
 
     public static function findImpl(t:ComplexType, e:Expr):Expr
