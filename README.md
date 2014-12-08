@@ -1,4 +1,4 @@
-# Haxe MongoDB object managers
+# MongoDB typed managers for Haxe
 
 Specialized macro-built managers.
 
