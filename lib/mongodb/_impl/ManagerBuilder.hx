@@ -28,16 +28,30 @@ class ManagerBuilder {
         if (built != null)
             return built;
 
+        var ct = t.toComplexType();
+
         var man = macro class {
 
-            public function new()
-            {
+            public var col:org.mongodb.Collection;
 
+            public function new(col)
+            {
+                this.col = col;
             }
 
             public macro function find(ethis:haxe.macro.Expr, e:haxe.macro.Expr):haxe.macro.Expr
             {
-                return mongodb._impl.ManagerMacros.findImpl($v{t.toComplexType()}, e);
+                return mongodb._impl.ManagerMacros.findImpl($v{t.toComplexType()}, ethis, e);
+            }
+
+            public macro function findOne(ethis:haxe.macro.Expr, e:haxe.macro.Expr):haxe.macro.Expr
+            {
+                return mongodb._impl.ManagerMacros.findOneImpl($v{ct}, ethis, e);
+            }
+
+            public function insert(doc:$ct):Void
+            {
+                col.insert(doc);
             }
 
         };
