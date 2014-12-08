@@ -1,6 +1,6 @@
 package compile.self;
 
-class TestBuildFailure {
+class TesterFailure {
 
     static function main()
     {

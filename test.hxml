@@ -3,5 +3,6 @@
 -cp test
 -cp lib
 -lib utest
+-lib mongodb
 # -D HXMOM_TYPER_TRACES
 

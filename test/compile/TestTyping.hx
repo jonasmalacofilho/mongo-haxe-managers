@@ -31,42 +31,9 @@ class TestTyping extends BuildTester {
 
 #else
 
+import compile.DocumentTypes;
 import haxe.macro.Expr;
 import mongodb._impl.ManagerMacros;
-
-typedef Person = {
-    name : String,
-    age : Int
-}
-
-typedef Boss = {
-    title : String,
-    person : Person
-}
-
-// `to Boss` is important! FIXME
-@:forward
-abstract ABoss(Boss) to Boss {
-}
-
-class CBoss {
-    public var title : String;
-    public var person : Person;
-}
-
-interface IBoss {
-    var title : String;
-    var person : Person;
-}
-
-class CEBoss extends CBoss {
-}
-
-typedef Team = {
-    name : String,
-    boss : CBoss,
-    people : Array<Person>
-}
 
 class TestTyping {
 
@@ -130,7 +97,8 @@ class TestTyping {
 
     public static macro function check(t:Expr, e:Expr):Expr
     {
-        return ManagerMacros.findImpl(ManagerMacros.toComplexType(t), e);
+        ManagerMacros.typeCheck(ManagerMacros.toComplexType(t), e);
+        return macro null;
     }
 
 }
