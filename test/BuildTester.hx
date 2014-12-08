@@ -1,3 +1,5 @@
+import StringTools.trim;
+import Sys.println;
 import utest.Assert;
 
 enum BuildResult {
@@ -22,11 +24,14 @@ class BuildTester {
     public function testBuild()
     {
         for (module in modules) {
-            trace(module);
+            println('Build testing module ${module.module}' + (module.vars.length > 0 ? ' with -D ${module.vars.join(",")}' : ''));
             var file = module.module;
 
             var args = ["--interp", "-main", file, "-cp", "test", "-cp", "lib", "-lib", "utest"];
-            for (v in module.vars) {
+
+            var vars = module.vars;
+            #if HXMOM_TYPER_TRACES vars.push("HXMOM_TYPER_TRACES"); #end
+            for (v in vars) {
                 args.push("-D");
                 args.push(v);
             }
@@ -41,7 +46,7 @@ class BuildTester {
                 Assert.equals(0, e, '$file${module.vars} failed to build with:\n      ${m.split("\n").join("\n      ")}');
             case BFailure(code, reg):
                 Assert.notEquals(0, e, '$file${module.vars} should not build');
-                trace('Failure message:\n$m');
+                println('failed with:\n  ${trim(m).split("\n").join("\n  ")}');
                 if (code != null)
                     Assert.equals(code, e);
                 if (reg != null)

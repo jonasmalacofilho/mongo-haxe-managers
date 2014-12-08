@@ -39,10 +39,11 @@ class ManagerMacros {
 
     public static function typeCheck(t:ComplexType, e:Expr, ?name:String)
     {
-        trace('Type check $name');
-        trace(e.toString());
-        trace(t);
+#if HXMOM_TYPER_TRACES
+        trace('Type check field $name ${e.toString()}:${t.toString()}');
         // trace(e);
+        // trace(t);
+#end
         switch (e.expr) {
         case EObjectDecl(fs):
             for (f in fs) {
@@ -50,7 +51,7 @@ class ManagerMacros {
                     var op = f.field.substr(8);
                     switch (op) {
                     case "$in", "$nin", "$all" if (!f.expr.expr.match(EArrayDecl(_))):
-                        throw 'Query operator $op expects an array';
+                        error('Query operator $op expects an array', e.pos);
                     case all:
                         typeCheck(t, f.expr, name);
                     }
@@ -59,7 +60,7 @@ class ManagerMacros {
                 } else {                            // embedded object fields
                     var ft = getField(t.toType(), name);
                     if (ft != null) {
-                        trace(ft.type);
+                        // trace(ft.type);
                         switch (ft.type) {
                         case TInst(_.get() => { name : "Array" }, [atype]):  // embedded array
                             typeCheck(atype.toComplexType(), e, null);
@@ -67,7 +68,7 @@ class ManagerMacros {
                             typeCheck(ft.type.toComplexType(), e, null);
                         }
                     } else {
-                        throw 'No field $name';
+                        error('No field $name', e.pos);
                     }
                 }
             }
@@ -75,12 +76,19 @@ class ManagerMacros {
             for (s in subs)
                 typeCheck(t, s, name);
         case all:
-            trace('Final type check $name');
-            typeof(macro {
-                var p = { $name : $e };
-                var q:$t = cast null;
-                p = q;
-            });
+#if HXMOM_TYPER_TRACES
+            trace('Final type check field $name');
+#end
+            try {
+                typeof(macro {
+                    var p = { $name : $e };
+                    var q:$t = cast null;
+                    p = q;
+                });
+            } catch (exception:Dynamic) {
+                var reg = ~/(.+) should be (.+)/g;
+                error(reg.replace(exception.toString(), "$2 should be $1"), e.pos);
+            }
         }
     }
 

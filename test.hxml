@@ -3,4 +3,5 @@
 -cp test
 -cp lib
 -lib utest
+# -D HXMOM_TYPER_TRACES
 
