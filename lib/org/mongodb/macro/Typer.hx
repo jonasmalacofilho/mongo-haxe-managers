@@ -1,4 +1,4 @@
-package mongodb._impl;
+package org.mongodb.macro;
 
 #if macro
 
@@ -9,7 +9,7 @@ using haxe.macro.ComplexTypeTools;
 using haxe.macro.ExprTools;
 using haxe.macro.TypeTools;
 
-class ManagerMacros {
+class Typer {
 
     static function selectField(fields:Array<ClassField>, name:String):Null<ClassField>
     {
@@ -98,20 +98,6 @@ class ManagerMacros {
         case macro (_:$t): t;
         case all: throw "assert";
         }
-    }
-
-    public static function findImpl(t:ComplexType, ethis:Expr, e:Expr):Expr
-    {
-        typeCheck(t, e, null);
-        // TODO projection
-        return macro $ethis.col.find($e);
-    }
-
-    public static function findOneImpl(t:ComplexType, ethis:Expr, e:Expr):Expr
-    {
-        typeCheck(t, e, null);
-        // TODO projection
-        return macro $ethis.col.findOne($e);
     }
 
 }

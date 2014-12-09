@@ -1,4 +1,4 @@
-package mongodb._impl;
+package org.mongodb.macro;
 
 import haxe.macro.Context.*;
 import haxe.macro.Expr;
@@ -7,7 +7,7 @@ using haxe.macro.ComplexTypeTools;
 using haxe.macro.ExprTools;
 using haxe.macro.TypeTools;
 
-class ManagerBuilder {
+class Builder {
 
     public static function build():Type
     {
@@ -41,12 +41,14 @@ class ManagerBuilder {
 
             public macro function find(ethis:haxe.macro.Expr, e:haxe.macro.Expr):haxe.macro.Expr
             {
-                return mongodb._impl.ManagerMacros.findImpl($v{t.toComplexType()}, ethis, e);
+                org.mongodb.macro.Typer.typeCheck($v{ct}, e);
+                return macro $ethis.col.find($e);
             }
 
             public macro function findOne(ethis:haxe.macro.Expr, e:haxe.macro.Expr):haxe.macro.Expr
             {
-                return mongodb._impl.ManagerMacros.findOneImpl($v{ct}, ethis, e);
+                org.mongodb.macro.Typer.typeCheck($v{ct}, e);
+                return macro $ethis.col.findOne($e);
             }
 
             public function insert(doc:$ct):Void
