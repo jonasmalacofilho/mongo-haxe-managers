@@ -42,12 +42,14 @@ class Builder {
             public macro function find(ethis:haxe.macro.Expr, e:haxe.macro.Expr):haxe.macro.Expr
             {
                 org.mongodb.macro.Typer.typeCheck($v{ct}, e);
+                // TODO projection
                 return macro $ethis.col.find($e);
             }
 
             public macro function findOne(ethis:haxe.macro.Expr, e:haxe.macro.Expr):haxe.macro.Expr
             {
                 org.mongodb.macro.Typer.typeCheck($v{ct}, e);
+                // TODO projection
                 return macro $ethis.col.findOne($e);
             }
 
