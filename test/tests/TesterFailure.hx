@@ -1,4 +1,4 @@
-package compile.self;
+package tests;
 
 class TesterFailure {
 

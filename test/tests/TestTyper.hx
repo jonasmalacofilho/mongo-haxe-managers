@@ -1,29 +1,29 @@
-package compile;
+package tests;
 
 #if !bt
 
-class TestTyping extends BuildTester {
+class TestTyper extends BuildTester {
 
     public function new()
     {
         super([
-            { module : "compile.TestTyping", vars : ["bt", "btgood"],    result : BSuccess },
-            { module : "compile.TestTyping", vars : ["bt", "bterror1"],  result : BFailure(null, ~/unexpected 1/i) },
-            { module : "compile.TestTyping", vars : ["bt", "bterror2"],  result : BFailure(null, ~/invalid type for field name/i) },
-            { module : "compile.TestTyping", vars : ["bt", "bterror3"],  result : BFailure(null, ~/invalid type for field age/i) },
-            { module : "compile.TestTyping", vars : ["bt", "bterror4"],  result : BFailure(null, ~/invalid type for field age/i) },
-            { module : "compile.TestTyping", vars : ["bt", "bterror5"],  result : BFailure(null, ~/invalid type for field title/i) },
-            { module : "compile.TestTyping", vars : ["bt", "bterror6"],  result : BFailure(null, ~/invalid type for field name/i) },
-            { module : "compile.TestTyping", vars : ["bt", "bterror7"],  result : BFailure(null, ~/invalid type for field age/i) },
-            { module : "compile.TestTyping", vars : ["bt", "bterror8"],  result : BFailure(null, ~/invalid type for field name/i) },
-            { module : "compile.TestTyping", vars : ["bt", "bterror9"],  result : BFailure(null, ~/invalid type for field name/i) },
-            { module : "compile.TestTyping", vars : ["bt", "bterror10"], result : BFailure(null, ~/invalid type for field name/i) },
-            { module : "compile.TestTyping", vars : ["bt", "bterror11"], result : BFailure(null, ~/\$in expects an array/i) },
-            // { module : "compile.TestTyping", vars : ["bt", "bterror12"], result : BFailure(null, null) },
-            // { module : "compile.TestTyping", vars : ["bt", "bterror13"], result : BFailure(null, null) },
-            // { module : "compile.TestTyping", vars : ["bt", "bterror14"], result : BFailure(null, null) },
-            // { module : "compile.TestTyping", vars : ["bt", "bterror15"], result : BFailure(null, null) },
-            { module : "compile.TestTyping", vars : ["bt", "btcur"],     result : BSuccess }
+            { module : "tests.TestTyper", vars : ["bt", "btgood"],    result : BSuccess },
+            { module : "tests.TestTyper", vars : ["bt", "bterror1"],  result : BFailure(null, ~/unexpected 1/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror2"],  result : BFailure(null, ~/invalid type for field name/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror3"],  result : BFailure(null, ~/invalid type for field age/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror4"],  result : BFailure(null, ~/invalid type for field age/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror5"],  result : BFailure(null, ~/invalid type for field title/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror6"],  result : BFailure(null, ~/invalid type for field name/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror7"],  result : BFailure(null, ~/invalid type for field age/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror8"],  result : BFailure(null, ~/invalid type for field name/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror9"],  result : BFailure(null, ~/invalid type for field name/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror10"], result : BFailure(null, ~/invalid type for field name/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror11"], result : BFailure(null, ~/\$in expects an array/i) },
+            // { module : "tests.TestTyper", vars : ["bt", "bterror12"], result : BFailure(null, null) },
+            // { module : "tests.TestTyper", vars : ["bt", "bterror13"], result : BFailure(null, null) },
+            // { module : "tests.TestTyper", vars : ["bt", "bterror14"], result : BFailure(null, null) },
+            // { module : "tests.TestTyper", vars : ["bt", "bterror15"], result : BFailure(null, null) },
+            { module : "tests.TestTyper", vars : ["bt", "btcur"],     result : BSuccess }
         ]);
     }
 
@@ -31,11 +31,11 @@ class TestTyping extends BuildTester {
 
 #else
 
-import compile.DocumentTypes;
 import haxe.macro.Expr;
-import mongodb._impl.ManagerMacros;
+import org.mongodb.macro.Typer;
+import tests.SomeTypes;
 
-class TestTyping {
+class TestTyper {
 
     public static function main()
     {
@@ -97,7 +97,7 @@ class TestTyping {
 
     public static macro function check(t:Expr, e:Expr):Expr
     {
-        ManagerMacros.typeCheck(ManagerMacros.toComplexType(t), e);
+        Typer.typeCheck(Typer.toComplexType(t), e);
         return macro null;
     }
 

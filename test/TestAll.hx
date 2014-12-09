@@ -8,11 +8,11 @@ class TestAll {
         var r = new Runner();
 
         // test itself (the build tester)
-        r.addCase(new compile.self.TestTester());
+        r.addCase(new tests.TestTester());
 
         // test compile time behavior
-        r.addCase(new compile.TestTyping());
-        r.addCase(new compile.TestBuild());
+        r.addCase(new tests.TestTyper());
+        r.addCase(new tests.TestBuilder());
 
         // test runtime behavior
 
