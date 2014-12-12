@@ -34,6 +34,7 @@ class TestTyper extends BuildTester {
 import haxe.macro.Expr;
 import org.mongodb.macro.Typer;
 import tests.SomeTypes;
+using org.mongodb.macro.ExprTools;
 
 class TestTyper {
 
@@ -97,7 +98,7 @@ class TestTyper {
 
     public static macro function check(t:Expr, e:Expr):Expr
     {
-        Typer.typeCheck(Typer.toComplexType(t), e);
+        Typer.typeCheck(t.toComplexType(), e);
         return macro null;
     }
 

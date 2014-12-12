@@ -8,34 +8,10 @@ import haxe.macro.Type;
 using haxe.macro.ComplexTypeTools;
 using haxe.macro.ExprTools;
 using haxe.macro.TypeTools;
+using org.mongodb.macro.ExprTools;
+using org.mongodb.macro.TypeTools;
 
 class Typer {
-
-    static function selectField(fields:Array<ClassField>, name:String):Null<ClassField>
-    {
-        for (f in fields)
-            if (f.name == name && f.kind.match(FVar(_)))
-                return f;
-        return null;
-    }
-
-    static function getField(t:Type, name:String):Null<ClassField>
-    {
-        switch (t) {
-        case TType(_, _):
-            return getField(t.follow(), name);
-        case TAnonymous(_.get() => anon):
-            return selectField(anon.fields, name);
-        case TInst(_.get() => cl, _):
-            return cl.findField(name);
-        case TAbstract(_.get() => abs, _):
-            if (abs.meta.has(":coreType"))
-                throw 'Assert: core $abs';
-            return getField(abs.type, name);
-        case all:
-            throw 'Assert: $all';
-        }
-    }
 
     public static function typeCheck(t:ComplexType, e:Expr, ?name:String)
     {
@@ -58,7 +34,7 @@ class Typer {
                 } else if (name == null) {          // base object fields
                     typeCheck(t, f.expr, f.field);
                 } else {                            // embedded object fields
-                    var ft = getField(t.toType(), name);
+                    var ft = t.toType().getField(name);
                     if (ft != null) {
                         // trace(ft.type);
                         switch (ft.type) {
@@ -92,11 +68,19 @@ class Typer {
         }
     }
 
-    public static function toComplexType(t:Expr):ComplexType
+    static function _forbidNulls(t:ComplexType, e:Expr):Expr
     {
-        return switch (parse('(_:${t.toString()})', t.pos)) {
-        case macro (_:$t): t;
-        case all: throw "assert";
+        // TODO
+        return e;
+    }
+
+    public static function forbidNulls(t:ComplexType, e:Expr):Expr
+    {
+        switch (e.expr) {
+        case EObjectDecl(_):
+            return e.map(_forbidNulls.bind(t));
+        case all:
+            throw 'Assert: $all';
         }
     }
 

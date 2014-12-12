@@ -2,7 +2,7 @@ package tests;
 
 typedef Person = {
     name : String,
-    age : Int
+    age : Int,
 }
 
 typedef Boss = {

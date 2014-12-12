@@ -49,13 +49,19 @@ class Builder {
             public macro function findOne(ethis:haxe.macro.Expr, e:haxe.macro.Expr):haxe.macro.Expr
             {
                 org.mongodb.macro.Typer.typeCheck($v{ct}, e);
-                // TODO projection
+                // var _e = org.mongodb.macro.Typer.forbidNulls($v{ct}, e);
+                // trace(haxe.macro.ExprTools.toString(_e));
                 return macro $ethis.col.findOne($e);
             }
 
             public function insert(doc:$ct):Void
             {
                 col.insert(doc);
+            }
+
+            public function drop():Void
+            {
+                col.drop();
             }
 
         };
