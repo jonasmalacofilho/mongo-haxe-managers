@@ -73,6 +73,8 @@ class Builder {
             base + "_" + name + params.join("_");
         case TType(_.get().name => name, params):
             base + "_" + name + params.join("_");
+				case TAbstract(_.get().name => name, params):
+            base + "_" + name + params.join("_");
         case all:
             throw 'Assert $all';
         }
