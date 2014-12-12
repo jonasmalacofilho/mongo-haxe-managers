@@ -10,6 +10,16 @@ class TypeTools {
         return f.kind.match(FVar(_));
     }
 
+    public static function getUnderlying(t:Type)
+    {
+        return switch(t.follow()) {
+            case TAbstract(_.get() => abs, params) if (!abs.meta.has(':coreType')):
+              getUnderlying( abs.type.applyTypeParameters(abs.params, params) );
+            case t:
+              t;
+        }
+    }
+
     public static function selectField(fields:Array<ClassField>, name:String):Null<ClassField>
     {
         for (f in fields)

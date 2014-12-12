@@ -15,6 +15,11 @@ class Typer {
 
     public static function typeCheck(t:ComplexType, e:Expr, ?name:String)
     {
+        _typeCheck(t.toType(),e,name);
+    }
+
+		private static function _typeCheck(t:Type, e:Expr, ?name:String)
+		{
 #if HXMOM_TYPER_TRACES
         trace('Type check field $name ${e.toString()}:${t.toString()}');
         // trace(e);
@@ -29,19 +34,19 @@ class Typer {
                     case "$in", "$nin", "$all" if (!f.expr.expr.match(EArrayDecl(_))):
                         error('Query operator $op expects an array', e.pos);
                     case all:
-                        typeCheck(t, f.expr, name);
+                        _typeCheck(t, f.expr, name);
                     }
                 } else if (name == null) {          // base object fields
-                    typeCheck(t, f.expr, f.field);
+                    _typeCheck(t, f.expr, f.field);
                 } else {                            // embedded object fields
-                    var ft = t.toType().getField(name);
+                    var ft = t.getField(name);
                     if (ft != null) {
                         // trace(ft.type);
                         switch (ft.type) {
                         case TInst(_.get() => { name : "Array" }, [atype]):  // embedded array
-                            typeCheck(atype.toComplexType(), e, null);
+                            _typeCheck(atype, e, null);
                         case all:
-                            typeCheck(ft.type.toComplexType(), e, null);
+                            _typeCheck(ft.type, e, null);
                         }
                     } else {
                         error('No field $name', e.pos);
@@ -50,12 +55,13 @@ class Typer {
             }
         case EArrayDecl(subs):
             for (s in subs)
-                typeCheck(t, s, name);
+                _typeCheck(t, s, name);
         case all:
 #if HXMOM_TYPER_TRACES
             trace('Final type check field $name');
 #end
             try {
+                var t = TypeTools.getUnderlying(t).toComplexType();
                 typeof(macro {
                     var p = { $name : $e };
                     var q:$t = cast null;
