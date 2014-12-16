@@ -1,0 +1,13 @@
+{
+	"name" : "mongodb-managers",
+	"url" : "http://github.com/jonasmalacofilho/mongo-haxe-managers",
+	"license" : "BSD",
+	"tags" : ["database"],
+	"description" : "MongoDB typed managers for Haxe",
+	"version" : "0.0.0",
+	"releasenote" : "Not released on haxelib yet",
+	"contributors" : ["jonasmalacofilho", "elebeta"],
+        "dependencies" : {
+            "mongodb" : ""
+        }
+}
