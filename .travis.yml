@@ -30,7 +30,7 @@ before_install: # clone travis-hx repo
 install: # setup the target
   - ~/travis-hx/setup.sh
   - haxelib install utest
-  - haxelib git managers git://github.com/jonasmalacofilho/mongo-haxe-driver.git managers
+  - haxelib git mongodb git://github.com/jonasmalacofilho/mongo-haxe-driver.git managers
 
 script:
   - cd $TRAVIS_BUILD_DIR
