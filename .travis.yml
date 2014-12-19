@@ -13,6 +13,7 @@ env:
     - TARGET=cpp
     - TARGET=java
     # haxe versions
+    - TARGET=interp HAXE_VER=1fda495
     - TARGET=interp HAXE_VER=3.1.3
 
 matrix:
@@ -21,8 +22,8 @@ matrix:
     # target differences are mostly a driver responsibility
     - env: TARGET=cpp
     - env: TARGET=java
-    # not sure if all macro features used where available in 3.1.3
-    # - env: TARGET=interp HAXE_VER=3.1.3
+    # not all macro features used where available in 3.1.3
+    - env: TARGET=interp HAXE_VER=3.1.3
 
 before_install: # clone travis-hx repo
   - travis_retry git clone --depth=50 --branch=master git://github.com/jonasmalacofilho/travis-hx.git ~/travis-hx
