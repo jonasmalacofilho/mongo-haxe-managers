@@ -1,4 +1,4 @@
-import utest.Runner;
+import utest.*;
 import utest.ui.Report;
 
 class TestAll {
@@ -18,6 +18,13 @@ class TestAll {
 
         Report.create(r);
         r.run();
+
+#if sys
+        var res:TestResult = null;
+        r.onProgress.add(function (o) if (o.done == o.totals) res = o.result);
+        r.run();
+        Sys.exit(res.allOk() ? 0 : 1);
+#end
     }
 
 }
