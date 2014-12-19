@@ -13,7 +13,7 @@ env:
     - TARGET=cpp
     - TARGET=java
     # haxe versions
-    - TARGET=interp HAXE_VER=1fda495
+    - TARGET=interp HAXE_VER=9044292
     - TARGET=interp HAXE_VER=3.1.3
 
 matrix:
