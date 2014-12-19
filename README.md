@@ -3,11 +3,12 @@
 Specialized macro-built managers for MongoDB collections that work on top of
 the [mongodb] library.
 
-[mongodb]: https://github.com/MattTuttle/mongo-haxe-driver
-
 Please note that the currenct version expects a particular [fork] of the
 mongodb library.
 
+[![Build Status](https://travis-ci.org/jonasmalacofilho/mongo-haxe-managers.svg?branch=master)](https://travis-ci.org/jonasmalacofilho/mongo-haxe-managers)
+
+[mongodb]: https://github.com/MattTuttle/mongo-haxe-driver
 [fork]: https://github.com/jonasmalacofilho/mongo-haxe-driver/tree/managers
 
 ## Features
