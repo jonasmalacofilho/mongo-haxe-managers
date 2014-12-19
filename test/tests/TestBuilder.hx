@@ -41,12 +41,19 @@ class TestBuilder {
 
         people.drop();
         people.insert({ name : "John", age : 20 });
-        people.col.insert({ name : "John" });  // incomplete document
+        people.col.insert({ name : "Bob" });  // incomplete document
 
 #if btgood
         // basics
         Assert.notEquals(null, people.findOne({ name : "John", age : 20 }));
-        // Assert.equals(1, Lambda.array(people.find({ name : "John"})).length);  // FAILING for now
+        // Assert.equals(null, people.findOne({ name : "Bob"}));  // FAILING for now
+
+        people.update({ name : "John" }, { name : "John", age : 21 });
+        Assert.equals(21, people.findOne({ name : "John" }).age);
+        people.update({ name : "Alice" }, { name : "Alice", age : 30 }, true);
+        Assert.notEquals(null, people.findOne({ name : "Alice" }));
+        people.update({ name : "Alice" }, { name : "Alice", age : 31 });
+        Assert.equals(31, people.findOne({ name : "Alice" }).age);
 
         // Expected errors:
 #elseif bterror1

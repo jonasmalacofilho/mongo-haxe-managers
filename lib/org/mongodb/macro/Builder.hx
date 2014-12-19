@@ -30,6 +30,9 @@ class Builder {
 
         var ct = t.toComplexType();
 
+        var _E = macro :haxe.macro.Expr;
+        var _EBool = macro :haxe.macro.Expr.ExprOf<Bool>;
+
         var man = macro class {
 
             public var col:org.mongodb.Collection;
@@ -39,16 +42,17 @@ class Builder {
                 this.col = col;
             }
 
-            public macro function find(ethis:haxe.macro.Expr, e:haxe.macro.Expr):haxe.macro.Expr
+            public macro function find(ethis:$_E, e:$_E):$_E
             {
                 org.mongodb.macro.Typer.typeCheck($v{ct}, e);
-                // TODO projection
+                // TODO modify query to reject unnexpected null fields
                 return macro $ethis.col.find($e);
             }
 
-            public macro function findOne(ethis:haxe.macro.Expr, e:haxe.macro.Expr):haxe.macro.Expr
+            public macro function findOne(ethis:$_E, e:$_E):$_E
             {
                 org.mongodb.macro.Typer.typeCheck($v{ct}, e);
+                // TODO modify query to reject unnexpected null fields
                 // var _e = org.mongodb.macro.Typer.forbidNulls($v{ct}, e);
                 // trace(haxe.macro.ExprTools.toString(_e));
                 return macro $ethis.col.findOne($e);
@@ -57,6 +61,13 @@ class Builder {
             public function insert(doc:$ct):Void
             {
                 col.insert(doc);
+            }
+
+            public macro function update(ethis:$_E, query:$_E, update:$_E, ?upsert:$_EBool, ?multi:$_EBool):$_E
+            {
+                org.mongodb.macro.Typer.typeCheck($v{ct}, query);
+                // TODO check update
+                return macro $ethis.col.update($query, $update, $upsert, $multi);
             }
 
             public function drop():Void
