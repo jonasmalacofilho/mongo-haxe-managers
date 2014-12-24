@@ -7,23 +7,22 @@ class TestAll {
     {
         var r = new Runner();
 
-        // test itself (the build tester)
+        // test the build tester itself
         r.addCase(new tests.TestTester());
 
-        // test compile time behavior
+        // actual tests
         r.addCase(new tests.TestTyper());
         r.addCase(new tests.TestBuilder());
 
-        // test runtime behavior
-
         Report.create(r);
-        r.run();
 
 #if sys
         var res:TestResult = null;
         r.onProgress.add(function (o) if (o.done == o.totals) res = o.result);
         r.run();
         Sys.exit(res.allOk() ? 0 : 1);
+#else
+        r.run();
 #end
     }
 
