@@ -44,8 +44,13 @@ class Manager<T> {
         // TODO modify query to reject unnexpected null fields
         // var _e = org.mongodb.macro.Typer.forbidNulls($v{ct}, e);
         // trace(haxe.macro.ExprTools.toString(_e));
-        return macro $ethis.col.findOne($e);
+        return macro @:privateAccess $ethis._findOne($e);
     }
+
+		@:extern inline private function _findOne(dyn:Dynamic):T
+		{
+			return this.col.findOne(dyn);
+		}
 
     public function insert(doc:T):Void
     {
