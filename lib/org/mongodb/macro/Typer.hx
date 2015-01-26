@@ -18,8 +18,8 @@ class Typer {
         _typeCheck(t.toType(),e,name);
     }
 
-		private static function _typeCheck(t:Type, e:Expr, ?name:String)
-		{
+    private static function _typeCheck(t:Type, e:Expr, ?name:String)
+    {
 #if HXMOM_TYPER_TRACES
         trace('Type check field $name ${e.toString()}:${t.toString()}');
         // trace(e);
