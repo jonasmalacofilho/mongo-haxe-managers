@@ -42,6 +42,7 @@ class TestBuilder {
         people.drop();
         people.insert({ name : "John", age : 20 });
         people.col.insert({ name : "Bob" });  // incomplete document
+        Assert.equals(2, people.find({}).toArray().length);
 
 #if btgood
         // basics

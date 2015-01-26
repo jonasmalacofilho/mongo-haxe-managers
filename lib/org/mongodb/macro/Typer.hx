@@ -18,8 +18,8 @@ class Typer {
         _typeCheck(t.toType(),e,name);
     }
 
-		private static function _typeCheck(t:Type, e:Expr, ?name:String)
-		{
+    private static function _typeCheck(t:Type, e:Expr, ?name:String)
+    {
 #if HXMOM_TYPER_TRACES
         trace('Type check field $name ${e.toString()}:${t.toString()}');
         // trace(e);
@@ -53,6 +53,8 @@ class Typer {
                     }
                 }
             }
+        case EBlock([]):  // {}
+            // NOOP: emtpy query is always valid
         case EArrayDecl(subs):
             for (s in subs)
                 _typeCheck(t, s, name);
