@@ -53,6 +53,8 @@ class Typer {
                     }
                 }
             }
+        case EBlock([]):  // {}
+            // NOOP: emtpy query is always valid
         case EArrayDecl(subs):
             for (s in subs)
                 _typeCheck(t, s, name);

@@ -46,6 +46,7 @@ class TestTyper {
         check(Person, { name : "Fury" });
         check(Person, { age : 90 });
         check(Person, { name : "Fury", age : { "$gt" : 40 } });
+        check(Person, {});
 
         // emebedded objects
         check(Boss, { title : "Director", person : { name : "Fury", age : 90 } });
