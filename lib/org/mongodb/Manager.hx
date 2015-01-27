@@ -33,24 +33,21 @@ class Manager<T> {
 
     public macro function find(ethis:Expr, e:Expr):Expr
     {
-        Typer.typeCheck(getType(ethis), e);
+        var t = getType(ethis);
+        Typer.typeCheck(t, e);
         // TODO modify query to reject unnexpected null fields
-        return macro $ethis.col.find($e);
+        return macro new org.mongodb.Cursor<$t>($ethis.col, $e, null, 0, 0);
     }
 
     public macro function findOne(ethis:Expr, e:Expr):Expr
     {
-        Typer.typeCheck(getType(ethis), e);
+        var t = getType(ethis);
+        Typer.typeCheck(t, e);
         // TODO modify query to reject unnexpected null fields
         // var _e = org.mongodb.macro.Typer.forbidNulls($v{ct}, e);
         // trace(haxe.macro.ExprTools.toString(_e));
-        return macro @:privateAccess $ethis._findOne($e);
+        return macro ($ethis.col.findOne($e):$t);
     }
-
-		@:extern inline private function _findOne(dyn:Dynamic):T
-		{
-			return this.col.findOne(dyn);
-		}
 
     public function insert(doc:T):Void
     {
