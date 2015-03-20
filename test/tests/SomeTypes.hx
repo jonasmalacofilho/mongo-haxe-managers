@@ -31,6 +31,7 @@ class CEBoss extends CBoss {
 typedef Team = {
     name : String,
     boss : CBoss,
-    people : Array<Person>
+    people : Array<Person>,
+    tags : Array<String>
 }
 

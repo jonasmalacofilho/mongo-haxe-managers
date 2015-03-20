@@ -19,8 +19,8 @@ class TestTyper extends BuildTester {
             { module : "tests.TestTyper", vars : ["bt", "bterror9"],  result : BFailure(null, ~/invalid type for field name/i) },
             { module : "tests.TestTyper", vars : ["bt", "bterror10"], result : BFailure(null, ~/invalid type for field name/i) },
             { module : "tests.TestTyper", vars : ["bt", "bterror11"], result : BFailure(null, ~/\$in expects an array/i) },
-            // { module : "tests.TestTyper", vars : ["bt", "bterror12"], result : BFailure(null, null) },
-            // { module : "tests.TestTyper", vars : ["bt", "bterror13"], result : BFailure(null, null) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror12"], result : BFailure(null, ~/invalid type for field name/i) },
+            { module : "tests.TestTyper", vars : ["bt", "bterror13"], result : BFailure(null, ~/invalid type for field tag/i) },
             // { module : "tests.TestTyper", vars : ["bt", "bterror14"], result : BFailure(null, null) },
             // { module : "tests.TestTyper", vars : ["bt", "bterror15"], result : BFailure(null, null) },
             { module : "tests.TestTyper", vars : ["bt", "btcur"],     result : BSuccess }
@@ -63,6 +63,8 @@ class TestTyper {
         // embedded arrays
         check(Team, { people : [{ name : "Fury" }] });
         check(Team, { people : { "$in" : [{ name : "Fury" }] } });
+        check(Team, { people : { name : "Fury" } });
+        check(Team, { tags : "blue" });  // issue #1
 
         // op $in for matching values
         check(Person, { name : { "$in" : ["Coulson", "Fury"] } });
@@ -90,10 +92,11 @@ class TestTyper {
         check(Person, { name : { "$in" : [1] } });
 #elseif bterror11
         check(Person, { name : { "$in" : "Fury" } });
+#elseif bterror12
+        check(Team, { people : { name : 1 } });
+#elseif bterror13
+        check(Team, { tags : 33 });
 #elseif btcur
-        // var p = { people : [{ name : "Fury" }] };
-        // var q:{ people:Array<{ name:String }> } = cast null;
-        // p = q;
 #end
     }
 

@@ -21,7 +21,7 @@ class Typer {
     private static function _typeCheck(t:Type, e:Expr, ?name:String)
     {
 #if HXMOM_TYPER_TRACES
-        trace('Type check field $name ${e.toString()}:${t.toString()}');
+        trace('Type check { $name : ${e.toString()} }:${t.toString()}');
         // trace(e);
         // trace(t);
 #end
@@ -62,16 +62,25 @@ class Typer {
 #if HXMOM_TYPER_TRACES
             trace('Final type check field $name');
 #end
+            var t = TypeTools.getUnderlying(t).toComplexType();
             try {
-                var t = TypeTools.getUnderlying(t).toComplexType();
                 typeof(macro {
                     var p = { $name : $e };
                     var q:$t = cast null;
                     p = q;
                 });
             } catch (exception:Dynamic) {
-                var reg = ~/(.+) should be (.+)/g;
-                error(reg.replace(exception.toString(), "$2 should be $1"), e.pos);
+                try {
+                    typeof(macro {
+                        var p = { $name : [$e] };
+                        var q:$t = cast null;
+                        p = q;
+                    });
+                } catch (exception:Dynamic) {
+                    trace(exception);
+                    var reg = ~/(.+) should be (.+)/g;
+                    error(reg.replace(exception.toString(), "$2 should be $1"), e.pos);
+                }
             }
         }
     }
