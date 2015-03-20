@@ -22,7 +22,7 @@ matrix:
     # target differences are mostly a driver responsibility
     - env: TARGET=cpp
     - env: TARGET=java
-    # not all macro features used where available in 3.1.3
+    # not all macro features used available in 3.1.3
     - env: TARGET=interp HAXE_VER=3.1.3
 
 before_install: # clone travis-hx repo
@@ -36,7 +36,7 @@ install: # setup the target
 script:
   - cd $TRAVIS_BUILD_DIR
   # build the target. This will call haxe with the HXFLAGS and HXFLAGS_EXTRA environment variables
-  - HXFLAGS="-main TestAll -cp test -cp lib -lib utest -lib mongodb" ~/travis-hx/build.sh
+  - HXFLAGS="-main TestAll -cp test -cp lib -lib utest -lib mongodb -D HXMOM_TYPER_TRACES -D travis" ~/travis-hx/build.sh
   # run the tests
   - ~/travis-hx/runtests.sh $FILENAME # this will set the $FILENAME defined on the environment variable to run the tests
 
