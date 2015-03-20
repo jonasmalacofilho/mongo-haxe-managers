@@ -27,29 +27,32 @@ class Typer {
 #end
         switch (e.expr) {
         case EObjectDecl(fs):
-            for (f in fs) {
-                if (f.field.substr(0, 9) == "@$__hx__$") {  // mongo operators, i.e., $gt
-                    var op = f.field.substr(8);
-                    switch (op) {
-                    case "$in", "$nin", "$all" if (!f.expr.expr.match(EArrayDecl(_))):
-                        error('Query operator $op expects an array', e.pos);
-                    case all:
-                        _typeCheck(t, f.expr, name);
-                    }
-                } else if (name == null) {          // base object fields
+            if (name == null) {  // query/base object
+                for (f in fs)
                     _typeCheck(t, f.expr, f.field);
-                } else {                            // embedded object fields
-                    var ft = t.getField(name);
-                    if (ft != null) {
-                        // trace(ft.type);
-                        switch (ft.type) {
-                        case TInst(_.get() => { name : "Array" }, [atype]):  // embedded array
-                            _typeCheck(atype, e, null);
+            } else {
+                for (f in fs) {
+                    if (f.field.substr(0, 9) == "@$__hx__$") {  // mongo operators, i.e., $gt
+                        var op = f.field.substr(8);
+                        switch (op) {
+                        case "$in", "$nin", "$all" if (!f.expr.expr.match(EArrayDecl(_))):
+                            error('Query operator $op expects an array', e.pos);
                         case all:
-                            _typeCheck(ft.type, e, null);
+                            _typeCheck(t, f.expr, name);
                         }
-                    } else {
-                        error('No field $name', e.pos);
+                    } else {  // embedded object fields
+                        var ft = t.getField(name);
+                        if (ft != null) {
+                            // trace(ft.type);
+                            switch (ft.type) {
+                            case TInst(_.get() => { name : "Array" }, [atype]):  // embedded array
+                                _typeCheck(atype, e, null);
+                            case all:
+                                _typeCheck(ft.type, e, null);
+                            }
+                        } else {
+                            error('No field $name', e.pos);
+                        }
                     }
                 }
             }
