@@ -72,17 +72,17 @@ class Typer {
                     var q:$t = cast null;
                     p = q;
                 });
-            } catch (exception:Dynamic) {
+            } catch (failed:Dynamic) {
                 try {
                     typeof(macro {
                         var p = { $name : [$e] };
                         var q:$t = cast null;
                         p = q;
                     });
-                } catch (exception:Dynamic) {
-                    trace(exception);
+                } catch (failedAgain:Dynamic) {
+                    // trace(failed);
                     var reg = ~/(.+) should be (.+)/g;
-                    error(reg.replace(exception.toString(), "$2 should be $1"), e.pos);
+                    error(reg.replace(failed.toString(), "$2 should be $1"), e.pos);
                 }
             }
         }
