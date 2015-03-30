@@ -67,7 +67,7 @@ class Typer {
 #end
             var t = TypeTools.getUnderlying(t).toComplexType();
             var errMsg;
-            var attempts = name == "_id" ? [e, macro ($e:org.bsonspec.ObjectID)] : [e, macro [$e]];
+            var attempts = [e, macro [$e]];
             for (attempt in attempts) {
                 try {
                     typeof(macro {
