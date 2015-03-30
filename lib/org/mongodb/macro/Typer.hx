@@ -66,29 +66,27 @@ class Typer {
             trace('Final type check field $name');
 #end
             var t = TypeTools.getUnderlying(t).toComplexType();
-            try {
-                typeof(macro {
-                    var p = { $name : $e };
-                    var q:$t = cast null;
-                    p = q;
-                });
-            } catch (failed:Dynamic) {
+            var errMsg;
+            var attempts = name == "_id" ? [e, macro ($e:org.bsonspec.ObjectID)] : [e, macro [$e]];
+            for (attempt in attempts) {
                 try {
                     typeof(macro {
-                        var p = { $name : [$e] };
+                        var p = { $name : $attempt };
                         var q:$t = cast null;
                         p = q;
                     });
-                } catch (failedAgain:Dynamic) {
-                    // trace(failed);
-                    var reg = ~/(.+) should be (.+)/g;
-                    var msg = reg.replace(failed.toString(), "$2 should be $1");
+                    return;
+                } catch (failed:Dynamic) {
+                    if (errMsg == null) {
+                        var reg = ~/(.+) should be (.+)/g;
+                        errMsg = reg.replace(failed.toString(), "$2 should be $1");
 #if !HXMOM_TYPER_TRACES
-                    msg = msg.split("\n").slice(-2).join("\n");
+                        errMsg = errMsg.split("\n").slice(-2).join("\n");
 #end
-                    error(msg, e.pos);
+                    }
                 }
             }
+            error(errMsg, e.pos);
         }
     }
 
