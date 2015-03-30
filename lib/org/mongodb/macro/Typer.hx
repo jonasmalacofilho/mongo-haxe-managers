@@ -82,7 +82,11 @@ class Typer {
                 } catch (failedAgain:Dynamic) {
                     // trace(failed);
                     var reg = ~/(.+) should be (.+)/g;
-                    error(reg.replace(failed.toString(), "$2 should be $1"), e.pos);
+                    var msg = reg.replace(failed.toString(), "$2 should be $1");
+#if !HXMOM_TYPER_TRACES
+                    msg = msg.split("\n").slice(-2).join("\n");
+#end
+                    error(msg, e.pos);
                 }
             }
         }
