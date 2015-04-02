@@ -47,15 +47,15 @@ class Manager<T> {
         return macro @:privateAccess $ethis._findOne($e);
     }
 
-		@:extern inline private function _findOne(dyn:Dynamic):T
-		{
-			return this.col.findOne(dyn);
-		}
+    @:extern inline private function _findOne(dyn:Dynamic):T
+    {
+       return this.col.findOne(dyn);
+    }
 
-		@:extern inline private function _find(dyn:Dynamic):Cursor<T>
-		{
-			return cast this.col.find(dyn);
-		}
+    @:extern inline private function _find(dyn:Dynamic):Cursor<T>
+    {
+      return cast this.col.find(dyn);
+    }
 
     public function insert(doc:T):Void
     {
