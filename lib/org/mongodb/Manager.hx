@@ -35,7 +35,7 @@ class Manager<T> {
     {
         Typer.typeCheck(getType(ethis), e);
         // TODO modify query to reject unnexpected null fields
-        return macro $ethis.col.find($e);
+        return macro @:privateAccess $ethis._find($e);
     }
 
     public macro function findOne(ethis:Expr, e:Expr):Expr
@@ -50,6 +50,11 @@ class Manager<T> {
 		@:extern inline private function _findOne(dyn:Dynamic):T
 		{
 			return this.col.findOne(dyn);
+		}
+
+		@:extern inline private function _find(dyn:Dynamic):Cursor<T>
+		{
+			return cast this.col.find(dyn);
 		}
 
     public function insert(doc:T):Void
